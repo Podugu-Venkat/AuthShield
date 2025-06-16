@@ -7,9 +7,11 @@ dotenv.config();
 app.get('/', (req, res) => {
     res.send('Hello, World!');
 }   );
+app.use(express.json());
 app.use('/api/auth',authRoutes);
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
     connectDB(); 
-    console.log('Server is running on port 3000');
+    console.log('Server is running on port :',PORT);
 });
 //mongodb+srv://venkatpodugu09:e57lEEoGOB0V6sBj@cluster0.chjbdml.mongodb.net/
