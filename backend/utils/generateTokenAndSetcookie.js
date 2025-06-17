@@ -1,11 +1,11 @@
-import { json } from "body-parser";
-import jwt from jsonwebtoken;
+
+import jwt from "jsonwebtoken";
 import exp from "constants";
-export const    generateTokenAndSetcookie = (res, userId) => {
+export const generateTokenAndSetcookie = (res, userId) => {
     const token= jwt.sign({ userId }, process.env.JWT_SECRET, {
         expiresIn: '1d', // Token expires in 1 day
     });
-}
+
 res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Set secure flag in production
@@ -13,3 +13,4 @@ res.cookie('token', token, {
     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
 });
 return token;
+};
