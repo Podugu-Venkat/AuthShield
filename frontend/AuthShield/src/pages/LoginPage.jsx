@@ -3,30 +3,22 @@ import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import Input from "../components/Input";
+import { useAuthStore } from "../store/authStore"; // Importing the authStore
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
 
+    // Destructure login, isLoading, and error from authStore
+    const { login, isLoading, error } = useAuthStore();
+
+    // Handle login form submission
+    const navigate = useNavigate();
     const handleLogin = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
-        setError("");
-
-        // Simulate login process
-        try {
-            // Replace with actual login logic
-        	console.log("Logging in with:", email, password);
-            // Simulate success
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 1000);
-        } catch (err) {
-            setError("Failed to login. Please try again.");
-            setIsLoading(false);
-        }
+        await login(email, password); // Call the login function from authStore
+        navigate("/"); // Redirect to home page after successful login
     };
 
     return (
@@ -63,6 +55,7 @@ const LoginPage = () => {
                             Forgot password?
                         </Link>
                     </div>
+                    {/* Display error message if login fails */}
                     {error && <p className='text-red-500 font-semibold mb-2'>{error}</p>}
 
                     <motion.button
@@ -72,6 +65,7 @@ const LoginPage = () => {
                         type='submit'
                         disabled={isLoading}
                     >
+                        {/* Show loader if login is in progress */}
                         {isLoading ? <Loader className='w-6 h-6 animate-spin mx-auto' /> : "Login"}
                     </motion.button>
                 </form>
